@@ -11,11 +11,13 @@ import CoreData
 
 class ToDoTableViewController: UITableViewController {
     
+    //Initialize cell controller that fetches data from user
     var resultsController: NSFetchedResultsController<Todo>!
     let coreDataStack = CoreDataStack()
     
     override func viewDidLoad() {
         super.viewDidLoad()
+        //Initialize and set the resultscontroller and sortdescriptors
         let request: NSFetchRequest<Todo> = Todo.fetchRequest()
         let sortDescriptors = NSSortDescriptor(key: "date", ascending: true)
         request.sortDescriptors = [sortDescriptors]
@@ -36,13 +38,15 @@ class ToDoTableViewController: UITableViewController {
         }
     }
     
+    //Here we have multiple table views to return different objects
     override func tableView(_ tableView: UITableView, numberOfRowsInSection section: Int) -> Int {
-        // #warning Incomplete implementation, return the number of rows
+        // #return the number of rows
         return resultsController.sections?[section].numberOfObjects ?? 0
     }
     
     
     override func tableView(_ tableView: UITableView, cellForRowAt indexPath: IndexPath) -> UITableViewCell {
+        //set title for the table view
         let cell = tableView.dequeueReusableCell(withIdentifier: "ToDoCell", for: indexPath)
         let todo = resultsController.object(at: indexPath)
         cell.textLabel?.text = todo.title
@@ -50,6 +54,8 @@ class ToDoTableViewController: UITableViewController {
     }
     
     override func tableView(_ tableView: UITableView, trailingSwipeActionsConfigurationForRowAt indexPath: IndexPath) -> UISwipeActionsConfiguration? {
+        //Delete button
+        //Delete a task
         let action = UIContextualAction(style: .destructive, title: "Delete") {(action, view, completion) in
             let todo = self.resultsController.object(at: indexPath)
             self.resultsController.managedObjectContext.delete(todo)
@@ -61,12 +67,12 @@ class ToDoTableViewController: UITableViewController {
                 completion(false)
             }
         }
-        //action.image = #imageLiteral(resourceName: "trash")
         action.backgroundColor = .red
         return UISwipeActionsConfiguration(actions: [action])
     }
     
     override func tableView(_ tableView: UITableView, leadingSwipeActionsConfigurationForRowAt indexPath: IndexPath) -> UISwipeActionsConfiguration? {
+        //Check item, which checks a task
         let action = UIContextualAction(style: .destructive, title: "Check") {(action, view, completion) in
             let todo = self.resultsController.object(at: indexPath)
             self.resultsController.managedObjectContext.delete(todo)
@@ -80,15 +86,16 @@ class ToDoTableViewController: UITableViewController {
             }
         }
         
-        //action.image = #imageLiteral(resourceName: "check")
         action.backgroundColor = .green
         return UISwipeActionsConfiguration(actions: [action])
     }
     
+    //initiate segue
     override func tableView(_ tableView: UITableView, didSelectRowAt indexPath: IndexPath) {
         performSegue(withIdentifier: "ShowAddToDo", sender: tableView.cellForRow(at: indexPath))
     }
     
+    //Add task to todo
     override func prepare(for segue: UIStoryboardSegue, sender: Any?) {
         if let _ = sender as? UIBarButtonItem, let vc = segue.destination as? AddToDoViewController {
             vc.managedContext = resultsController.managedObjectContext

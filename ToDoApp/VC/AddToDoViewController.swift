@@ -3,6 +3,8 @@ import CoreData
 
 class AddToDoViewController: UIViewController {
     
+    //All the front end here
+    //Buttons and outlets
     var managedContext: NSManagedObjectContext!
     var todo: Todo?
     
@@ -11,15 +13,18 @@ class AddToDoViewController: UIViewController {
     @IBOutlet weak var segmentedControl: UISegmentedControl!
     @IBOutlet weak var bottomConstraint: NSLayoutConstraint!
     
+    //cancel button
     @IBAction func cancel(_ sender: UIButton) {
         dismissAndResign()
     }
     
+    //remove text view
     fileprivate func dismissAndResign() {
         dismiss(animated: true)
         textView.resignFirstResponder()
     }
 
+    //done button
     @IBAction func done(_ sender: UIButton) {
         guard let title = textView.text, !title.isEmpty else {
             return
@@ -41,6 +46,7 @@ class AddToDoViewController: UIViewController {
         }
     }
     
+    //show keyboard when typing task
     @objc func keyboardWillShow(with notification: Notification) {
         let key = "UIKeyboardFrameEndUserInfoKey"
         guard let keyboardFrame = notification.userInfo?[key] as? NSValue else {return}
@@ -52,6 +58,7 @@ class AddToDoViewController: UIViewController {
         }
     }
     
+    //show tasks on page
     override func viewDidLoad() {
         super.viewDidLoad()
         NotificationCenter.default.addObserver(self, selector: #selector(keyboardWillShow(with:)), name: .UIKeyboardWillShow, object: nil)
@@ -67,7 +74,7 @@ class AddToDoViewController: UIViewController {
     
 }
 
-
+//Display keyboard
 extension AddToDoViewController: UITextViewDelegate {
     func textViewDidChangeSelection(_ textView: UITextView) {
         if doneButton.isHidden {

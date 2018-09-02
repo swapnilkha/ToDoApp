@@ -2,6 +2,7 @@ import Foundation
 import CoreData
 
 class CoreDataStack {
+    //holds the todos
     var container: NSPersistentContainer {
         let container = NSPersistentContainer(name: "ToDos")
         container.loadPersistentStores { (description, error) in
@@ -12,9 +13,7 @@ class CoreDataStack {
         }
         return container
     }
-
     var managedContext: NSManagedObjectContext {
         return container.viewContext
     }
-
 }
