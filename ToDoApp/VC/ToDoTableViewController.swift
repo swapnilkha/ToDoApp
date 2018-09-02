@@ -111,7 +111,7 @@ class ToDoTableViewController: UITableViewController {
     
 }
 
-
+//Controls the table view controller deleting/adding
 extension ToDoTableViewController: NSFetchedResultsControllerDelegate {
     func controllerWillChangeContent(_ controller: NSFetchedResultsController<NSFetchRequestResult>) {
         tableView.beginUpdates()
